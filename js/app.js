@@ -1,6 +1,7 @@
 let currentSequence = [];
 let sequenceLength = 4;
 let numberOfButtons = 4;
+let currentLevel = 1;
 
 const gameContainer = document.getElementById("game-container");
 
@@ -51,6 +52,7 @@ const highlightButtonsInSequence = () => {
 const gameStartButtonClickHandler = () => {
     highlightButtonsInSequence();
     gameButtonsAreDisabled(false);
+    displayResultMessage("");
 };
 
 const gameButtonClickHandler = (e) => {
@@ -58,24 +60,23 @@ const gameButtonClickHandler = (e) => {
     if (buttonId === currentSequence[0]) {
         currentSequence.shift();
     } else {
-        displayResult("lose");
+        displayResultMessage("Wrong button!");
         gameButtonsAreDisabled(true);
     }
 
     if (currentSequence.length === 0) {
-        displayResult("win");
+        displayResultMessage("You did it!");
         gameButtonsAreDisabled(true);
+        currentLevel++;
+        displayCurrentLevel(currentLevel);
     }
+    e.currentTarget.blur();
     console.log(currentSequence);
 };
 
-const displayResult = (result) => {
+const displayResultMessage = (resultMessage) => {
     const resultsDisplay = document.getElementById("results-container");
-    if (result === "win") {
-        resultsDisplay.innerHTML = "<h3>You did it!</h3>";
-    } else if (result === "lose") {
-        resultsDisplay.innerHTML = "<h3>Wrong button!</h3>";
-    }
+    resultsDisplay.innerHTML = `<h3>${resultMessage}</h3>`;
 };
 
 const gameButtonsAreDisabled = (buttonState) => {
@@ -85,5 +86,11 @@ const gameButtonsAreDisabled = (buttonState) => {
     });
 };
 
+const displayCurrentLevel = (level) => {
+    const levelDisplay = document.getElementById("level-display-container");
+    levelDisplay.innerHTML = `<h3>Level: ${level}</h3>`;
+};
+
 createGameStartButton();
 generateGameButtons(numberOfButtons);
+displayCurrentLevel(currentLevel);
