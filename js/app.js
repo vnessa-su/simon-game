@@ -88,9 +88,28 @@ const gameButtonsAreDisabled = (buttonState) => {
 
 const displayCurrentLevel = (level) => {
     const levelDisplay = document.getElementById("level-display-container");
-    levelDisplay.innerHTML = `<h3>Level: ${level}</h3>`;
+    let levelText = document.querySelector("#level-display-container h3");
+    if (!levelText) {
+        levelText = document.createElement("h3");
+        levelDisplay.insertBefore(levelText, levelDisplay.firstChild);
+    }
+    levelText.innerText = `Level: ${level}`;
+};
+
+const createResetButton = () => {
+    const levelDisplay = document.getElementById("level-display-container");
+    const resetButton = document.createElement("button");
+    resetButton.innerText = "Reset to Level 1";
+    resetButton.addEventListener("click", resetButtonClickHandler);
+    levelDisplay.appendChild(resetButton);
+};
+
+const resetButtonClickHandler = () => {
+    currentLevel = 1;
+    displayCurrentLevel(currentLevel);
 };
 
 createGameStartButton();
 generateGameButtons(numberOfButtons);
 displayCurrentLevel(currentLevel);
+createResetButton();
