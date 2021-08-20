@@ -1,45 +1,34 @@
-let currentSequence = [];
-let sequenceLength = 4;
-let numberOfButtons = 4;
-let currentLevel = 1;
-
 const gameContainer = document.getElementById("game-container");
 
-const createGameStartButton = () => {
+const createGameStartButton = (gameObject) => {
     const startButton = document.createElement("button");
     startButton.innerText = "Start Next";
-    startButton.addEventListener("click", gameStartButtonClickHandler);
+    startButton.addEventListener(
+        "click",
+        gameStartButtonClickHandler(gameObject)
+    );
     gameContainer.appendChild(startButton);
 };
 
-const generateGameButtons = (numberOfButtons) => {
-    for (let i = 0; i < numberOfButtons; i++) {
+const generateGameButtons = (gameObject) => {
+    for (let i = 0; i < gameObject.numberOfButtons; i++) {
         const gameButton = document.createElement("button");
         gameButton.setAttribute("class", "game-button");
         gameButton.innerText = `Button ${i}`;
         gameButton.id = i;
-        gameButton.addEventListener("click", gameButtonClickHandler);
+        gameButton.addEventListener(
+            "click",
+            gameButtonClickHandler(gameObject)
+        );
         gameContainer.appendChild(gameButton);
     }
     gameButtonsAreDisabled(true);
 };
 
-const generateRandomPattern = (patternLength, numberLimit) => {
-    const sequence = [];
-    for (let i = 0; i < patternLength; i++) {
-        const randomButtonNumber = Math.floor(Math.random() * numberLimit);
-        sequence.push(randomButtonNumber);
-    }
-    return sequence;
-};
-
-const highlightButtonsInSequence = () => {
-    const sequenceOfButtons = generateRandomPattern(
-        sequenceLength,
-        numberOfButtons
-    );
-    currentSequence = sequenceOfButtons;
-    console.log(currentSequence);
+const highlightButtonsInSequence = (gameObject) => {
+    gameObject.generateRandomSequence();
+    console.log(gameObject.currentButtonSequence);
+    const sequenceOfButtons = gameObject.currentButtonSequence;
     sequenceOfButtons.forEach((buttonId, sequenceIndex) => {
         setTimeout(() => {
             const buttonToHighlight = document.getElementById(buttonId);
@@ -49,29 +38,34 @@ const highlightButtonsInSequence = () => {
     });
 };
 
-const gameStartButtonClickHandler = () => {
-    highlightButtonsInSequence();
-    gameButtonsAreDisabled(false);
-    displayResultMessage("");
+const gameStartButtonClickHandler = (gameObject) => {
+    return () => {
+        highlightButtonsInSequence(gameObject);
+        gameButtonsAreDisabled(false);
+        displayResultMessage("");
+    };
 };
 
-const gameButtonClickHandler = (e) => {
-    const buttonId = parseInt(e.currentTarget.id);
-    if (buttonId === currentSequence[0]) {
-        currentSequence.shift();
-    } else {
-        displayResultMessage("Wrong button!");
-        gameButtonsAreDisabled(true);
-    }
+const gameButtonClickHandler = (gameObject) => {
+    return (e) => {
+        const buttonId = parseInt(e.currentTarget.id);
+        const buttonSequence = gameObject.currentButtonSequence;
+        if (buttonId === buttonSequence[0]) {
+            buttonSequence.shift();
+        } else {
+            displayResultMessage("Wrong button!");
+            gameButtonsAreDisabled(true);
+        }
 
-    if (currentSequence.length === 0) {
-        displayResultMessage("You did it!");
-        gameButtonsAreDisabled(true);
-        currentLevel++;
-        displayCurrentLevel(currentLevel);
-    }
-    e.currentTarget.blur();
-    console.log(currentSequence);
+        if (buttonSequence.length === 0) {
+            displayResultMessage("You did it!");
+            gameButtonsAreDisabled(true);
+            gameObject.incrementLevel();
+            displayCurrentLevel(gameObject.currentLevel);
+        }
+        e.currentTarget.blur();
+        console.log(buttonSequence);
+    };
 };
 
 const displayResultMessage = (resultMessage) => {
@@ -96,20 +90,23 @@ const displayCurrentLevel = (level) => {
     levelText.innerText = `Level: ${level}`;
 };
 
-const createResetButton = () => {
+const createResetButton = (gameObject) => {
     const levelDisplay = document.getElementById("level-display-container");
     const resetButton = document.createElement("button");
     resetButton.innerText = "Reset to Level 1";
-    resetButton.addEventListener("click", resetButtonClickHandler);
+    resetButton.addEventListener("click", resetButtonClickHandler(gameObject));
     levelDisplay.appendChild(resetButton);
 };
 
-const resetButtonClickHandler = () => {
-    currentLevel = 1;
-    displayCurrentLevel(currentLevel);
+const resetButtonClickHandler = (gameObject) => {
+    return () => {
+        gameObject.currentLevel = 1;
+        displayCurrentLevel(gameObject.currentLevel);
+    };
 };
 
-createGameStartButton();
-generateGameButtons(numberOfButtons);
-displayCurrentLevel(currentLevel);
-createResetButton();
+const game = new Game();
+createGameStartButton(game);
+generateGameButtons(game);
+displayCurrentLevel(game.currentLevel);
+createResetButton(game);
