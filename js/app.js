@@ -20,6 +20,7 @@ const generateGameButtons = (numberOfButtons) => {
         gameButton.addEventListener("click", gameButtonClickHandler);
         gameContainer.appendChild(gameButton);
     }
+    gameButtonsAreDisabled(true);
 };
 
 const generateRandomPattern = (patternLength, numberLimit) => {
@@ -49,6 +50,7 @@ const highlightButtonsInSequence = () => {
 
 const gameStartButtonClickHandler = () => {
     highlightButtonsInSequence();
+    gameButtonsAreDisabled(false);
 };
 
 const gameButtonClickHandler = (e) => {
@@ -57,10 +59,12 @@ const gameButtonClickHandler = (e) => {
         currentSequence.shift();
     } else {
         displayResult("lose");
+        gameButtonsAreDisabled(true);
     }
 
     if (currentSequence.length === 0) {
         displayResult("win");
+        gameButtonsAreDisabled(true);
     }
     console.log(currentSequence);
 };
@@ -72,6 +76,13 @@ const displayResult = (result) => {
     } else if (result === "lose") {
         resultsDisplay.innerHTML = "<h3>Wrong button!</h3>";
     }
+};
+
+const gameButtonsAreDisabled = (buttonState) => {
+    const allGameButtons = document.querySelectorAll(".game-button");
+    allGameButtons.forEach((button) => {
+        button.disabled = buttonState;
+    });
 };
 
 createGameStartButton();
