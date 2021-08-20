@@ -1,0 +1,22 @@
+.game-button {
+    background-color: -internal-light-dark(rgb(239, 239, 239), rgb(59, 59, 59));
+    border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+    border-width: 2px;
+    border-radius: 3px;
+}
+
+.game-button:focus {
+    animation-name: flash-button;
+    animation-duration: 900ms;
+}
+
+@keyframes flash-button {
+    0% {
+        background-color: red;
+        border-color: palevioletred;
+    }
+    100% {
+        background-color: lightpink;
+        border-color: palevioletred;
+    }
+}
