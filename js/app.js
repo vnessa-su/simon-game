@@ -17,6 +17,7 @@ const generateGameButtons = (numberOfButtons) => {
         gameButton.setAttribute("class", "game-button");
         gameButton.innerText = `Button ${i}`;
         gameButton.id = i;
+        gameButton.addEventListener("click", gameButtonClickHandler);
         gameContainer.appendChild(gameButton);
     }
 };
@@ -46,8 +47,16 @@ const highlightButtonsInSequence = () => {
     });
 };
 
-const gameStartButtonClickHandler = (e) => {
+const gameStartButtonClickHandler = () => {
     highlightButtonsInSequence();
+};
+
+const gameButtonClickHandler = (e) => {
+    const buttonId = parseInt(e.currentTarget.id);
+    if (buttonId === currentSequence[0]) {
+        currentSequence.shift();
+    }
+    console.log(currentSequence);
 };
 
 createGameStartButton();
