@@ -55,8 +55,23 @@ const gameButtonClickHandler = (e) => {
     const buttonId = parseInt(e.currentTarget.id);
     if (buttonId === currentSequence[0]) {
         currentSequence.shift();
+    } else {
+        displayResult("lose");
+    }
+
+    if (currentSequence.length === 0) {
+        displayResult("win");
     }
     console.log(currentSequence);
+};
+
+const displayResult = (result) => {
+    const resultsDisplay = document.getElementById("results-container");
+    if (result === "win") {
+        resultsDisplay.innerHTML = "<h3>You did it!</h3>";
+    } else if (result === "lose") {
+        resultsDisplay.innerHTML = "<h3>Wrong button!</h3>";
+    }
 };
 
 createGameStartButton();
