@@ -7,7 +7,7 @@
 
 .game-button:focus {
     animation-name: flash-button;
-    animation-duration: 900ms;
+    animation-duration: 500ms;
 }
 
 @keyframes flash-button {
