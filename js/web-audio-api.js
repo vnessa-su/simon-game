@@ -30,7 +30,6 @@ class WebAudioApi {
     };
 
     playNote = (noteToPlayHz, durationSeconds, delaySeconds) => {
-        console.log(noteToPlayHz);
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         const audioCtx = new AudioContext();
         let osc = audioCtx.createOscillator();
@@ -41,7 +40,7 @@ class WebAudioApi {
         amp.gain.value = -1;
 
         let lfo = audioCtx.createOscillator();
-        lfo.type = "cosine";
+        lfo.type = "sine";
         lfo.frequency.value = 2 * noteToPlayHz;
 
         lfo.connect(amp.gain);
