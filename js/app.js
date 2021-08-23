@@ -1,6 +1,6 @@
-const gameContainer = document.getElementById("game-container");
-
 const createGameStartButton = (gameObject) => {
+    const gameContainer = document.getElementById("game-container");
+
     const startButton = document.createElement("button");
     startButton.innerText = "Start Next";
     startButton.addEventListener(
@@ -11,6 +11,8 @@ const createGameStartButton = (gameObject) => {
 };
 
 const generateGameButtons = (gameObject) => {
+    const gameContainer = document.getElementById("game-container");
+
     const butonGroup = game.gameButtonGroup;
 
     butonGroup.buttons.forEach((button) => {
@@ -73,6 +75,7 @@ const gameButtonClickHandler = (gameObject) => {
             gameButtonsAreDisabled(true);
             gameObject.incrementLevel();
             displayCurrentLevel(gameObject.currentLevel);
+            updateLevelSelect(gameObject.maxLevelCompleted);
         }
         e.currentTarget.blur();
     };
@@ -110,9 +113,54 @@ const createResetButton = (gameObject) => {
 
 const resetButtonClickHandler = (gameObject) => {
     return () => {
-        gameObject.currentLevel = 1;
+        gameObject.resetLevels();
+        displayCurrentLevel(gameObject.currentLevel);
+        updateLevelSelect(gameObject.maxLevelCompleted);
+    };
+};
+
+const createLevelSelect = (gameObject) => {
+    const levelDisplay = document.getElementById("level-display-container");
+    const levelSelect = document.createElement("select");
+    levelSelect.id = "level-select";
+    levelDisplay.appendChild(levelSelect);
+
+    updateLevelSelect(gameObject.maxLevelCompleted);
+
+    const goToLevelButton = document.createElement("button");
+    goToLevelButton.innerText = "Go To Level";
+    goToLevelButton.addEventListener(
+        "click",
+        goToLevelButtonClickHandler(gameObject)
+    );
+    levelDisplay.appendChild(goToLevelButton);
+};
+
+const goToLevelButtonClickHandler = (currentLevel) => {
+    return () => {
+        const selectedLevel = document.getElementById("level-select").value;
+        gameObject.currentLevel = selectedLevel;
         displayCurrentLevel(gameObject.currentLevel);
     };
+};
+
+const updateLevelSelect = (maxLevelCompleted) => {
+    const levelSelect = document.getElementById("level-select");
+    levelSelect.innerHTML = "";
+
+    const defaultOption = document.createElement("option");
+    defaultOption.innerText = "Select a Level:";
+    defaultOption.value = "";
+    defaultOption.selected = true;
+    defaultOption.disabled = true;
+    levelSelect.appendChild(defaultOption);
+
+    for (let i = 1; i <= maxLevelCompleted; i++) {
+        const newOption = document.createElement("option");
+        newOption.innerText = `Level ${i}`;
+        newOption.value = i;
+        levelSelect.appendChild(newOption);
+    }
 };
 
 const game = new Game();
@@ -126,3 +174,5 @@ const buttonSoundList = audio.generateRandomNoteArray(4, false);
 const buttonGroup = game.gameButtonGroup;
 buttonGroup.generateMultipleButtons(game.numberOfButtons, buttonSoundList);
 generateGameButtons(game);
+
+createLevelSelect(game);
