@@ -1,31 +1,32 @@
 const gameContainer = document.getElementById("game-container");
 
-const createGameStartButton = (gameObject) => {
+const createGameStartButton = (gameObject, buttonGroupObject) => {
     const startButton = document.createElement("button");
     startButton.innerText = "Start Next";
     startButton.addEventListener(
         "click",
-        gameStartButtonClickHandler(gameObject)
+        gameStartButtonClickHandler(gameObject, buttonGroupObject)
     );
     gameContainer.appendChild(startButton);
 };
 
-const generateGameButtons = (gameObject) => {
-    for (let i = 0; i < gameObject.numberOfButtons; i++) {
+const generateGameButtons = (buttonGroupObject, gameObject) => {
+    console.log(buttonGroupObject);
+    buttonGroupObject.buttons.forEach((button) => {
         const gameButton = document.createElement("button");
         gameButton.setAttribute("class", "game-button");
-        gameButton.innerText = `Button ${i}`;
-        gameButton.id = i;
+        gameButton.innerText = `Button ${button.id}`;
+        gameButton.id = button.id;
         gameButton.addEventListener(
             "click",
-            gameButtonClickHandler(gameObject)
+            gameButtonClickHandler(gameObject, button)
         );
         gameContainer.appendChild(gameButton);
-    }
+    });
     gameButtonsAreDisabled(true);
 };
 
-const highlightButtonsInSequence = (gameObject) => {
+const highlightButtonsInSequence = (gameObject, buttonGroupObject) => {
     gameObject.generateRandomSequence();
     console.log(gameObject.currentButtonSequence);
     const sequenceOfButtons = gameObject.currentButtonSequence;
@@ -34,22 +35,23 @@ const highlightButtonsInSequence = (gameObject) => {
             const buttonToHighlight = document.getElementById(buttonId);
             buttonToHighlight.blur();
             buttonToHighlight.focus();
-            audio.playNote(audio.getRandomNoteFrequencyHz(), 0.2, 0);
+            const button = buttonGroupObject.getButtonById(buttonId);
+            audio.playNote(button.soundHz, 0.2, 0);
         }, 550 * sequenceIndex);
     });
 };
 
-const gameStartButtonClickHandler = (gameObject) => {
+const gameStartButtonClickHandler = (gameObject, buttonGroupObject) => {
     return () => {
-        highlightButtonsInSequence(gameObject);
+        highlightButtonsInSequence(gameObject, buttonGroupObject);
         gameButtonsAreDisabled(false);
         displayResultMessage("");
     };
 };
 
-const gameButtonClickHandler = (gameObject) => {
+const gameButtonClickHandler = (gameObject, buttonObject) => {
     return (e) => {
-        audio.playNote(audio.getRandomNoteFrequencyHz(), 0.2, 0);
+        audio.playNote(buttonObject.soundHz, 0.2, 0);
         const buttonId = parseInt(e.currentTarget.id);
         const buttonSequence = gameObject.currentButtonSequence;
         if (buttonId === buttonSequence[0]) {
@@ -108,11 +110,15 @@ const resetButtonClickHandler = (gameObject) => {
 };
 
 const game = new Game();
-createGameStartButton(game);
-generateGameButtons(game);
 displayCurrentLevel(game.currentLevel);
 createResetButton(game);
 
 const audio = new WebAudioApi();
-console.log(audio.generateRandomNoteArray(4, false));
-console.log(audio.generateRandomNoteArray(4, true));
+const buttonSoundList = audio.generateRandomNoteArray(4, false);
+console.log(buttonSoundList);
+
+const gameButtonGroup = new GameButtonFactory();
+gameButtonGroup.generateMultipleButtons(4, buttonSoundList);
+console.log(gameButtonGroup.buttons);
+createGameStartButton(game, gameButtonGroup);
+generateGameButtons(gameButtonGroup, game);
