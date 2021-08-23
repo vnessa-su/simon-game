@@ -1,12 +1,13 @@
 class Game {
     constructor() {
-        this.numberOfButtons = 4;
         this.currentLevel = 1;
         this.currentButtonSequence = [];
+        this.numberOfButtons = 4;
+        this.gameButtonGroup = new GameButtonFactory();
+        this.webAudioApi = new WebAudioApi();
     }
 
     generateRandomSequence = () => {
-        console.log("generating sequence");
         const sequence = [];
         for (let i = 0; i < this.currentLevel; i++) {
             const randomButtonNumber = Math.floor(
