@@ -1,4 +1,4 @@
-// Web Audio API implementation inspired by MDN documentation:
+// Web Audio API implementation modified from MDN documentation:
 // https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Advanced_techniques
 
 class WebAudioApi {
@@ -32,21 +32,15 @@ class WebAudioApi {
     playNote = (noteToPlayHz, durationSeconds, delaySeconds) => {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         const audioCtx = new AudioContext();
-        let osc = audioCtx.createOscillator();
-        osc.type = "sine";
-        osc.frequency.value = noteToPlayHz;
+        let oscillator = audioCtx.createOscillator();
+        oscillator.type = "sine";
+        oscillator.frequency.value = noteToPlayHz;
 
-        let amp = audioCtx.createGain();
-        amp.gain.value = -1;
+        let amplifier = audioCtx.createGain();
+        amplifier.gain.value = 2;
 
-        let lfo = audioCtx.createOscillator();
-        lfo.type = "sine";
-        lfo.frequency.value = 2 * noteToPlayHz;
-
-        lfo.connect(amp.gain);
-        osc.connect(amp).connect(audioCtx.destination);
-        lfo.start();
-        osc.start(delaySeconds);
-        osc.stop(delaySeconds + durationSeconds);
+        oscillator.connect(amplifier).connect(audioCtx.destination);
+        oscillator.start(delaySeconds);
+        oscillator.stop(delaySeconds + durationSeconds);
     };
 }
