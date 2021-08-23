@@ -34,7 +34,8 @@ const highlightButtonsInSequence = (gameObject) => {
             const buttonToHighlight = document.getElementById(buttonId);
             buttonToHighlight.blur();
             buttonToHighlight.focus();
-        }, 1000 * sequenceIndex);
+            audio.playNote(audio.getRandomNoteFrequencyHz(), 0.2, 0);
+        }, 550 * sequenceIndex);
     });
 };
 
@@ -48,6 +49,7 @@ const gameStartButtonClickHandler = (gameObject) => {
 
 const gameButtonClickHandler = (gameObject) => {
     return (e) => {
+        audio.playNote(audio.getRandomNoteFrequencyHz(), 0.2, 0);
         const buttonId = parseInt(e.currentTarget.id);
         const buttonSequence = gameObject.currentButtonSequence;
         if (buttonId === buttonSequence[0]) {
@@ -110,3 +112,7 @@ createGameStartButton(game);
 generateGameButtons(game);
 displayCurrentLevel(game.currentLevel);
 createResetButton(game);
+
+const audio = new WebAudioApi();
+console.log(audio.generateRandomNoteArray(4, false));
+console.log(audio.generateRandomNoteArray(4, true));
