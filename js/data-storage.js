@@ -11,6 +11,10 @@ class DataStorage {
             gameObject.maxLevelCompleted = gameData.maxLevelCompleted;
             gameObject.currentButtonSequence = gameData.currentButtonSequence;
             gameObject.numberOfButtons = gameData.numberOfButtons;
+            gameObject.gameButtonGroup.buttons =
+                gameData.gameButtonGroup.buttons;
+            gameObject.gameButtonGroup.currentId =
+                gameData.gameButtonGroup.currentId;
         }
         return gameObject;
     };

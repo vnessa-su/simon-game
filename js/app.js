@@ -13,16 +13,24 @@ const createGameStartButton = (gameObject) => {
 const generateGameButtons = (gameObject) => {
     const gameContainer = document.getElementById("game-container");
 
-    const audio = gameObject.webAudioApi;
-    const buttonSoundList = audio.generateRandomNoteArray(
-        gameObject.numberOfButtons
-    );
-
     const buttonGroup = gameObject.gameButtonGroup;
-    buttonGroup.generateMultipleButtons(
-        gameObject.numberOfButtons,
-        buttonSoundList
-    );
+    if (buttonGroup.buttons.length !== gameObject.numberOfButtons) {
+        const audio = gameObject.webAudioApi;
+        const buttonSoundList = audio.generateRandomNoteArray(
+            gameObject.numberOfButtons
+        );
+
+        const allGameButtons = document.querySelectorAll(".game-button");
+        allGameButtons.forEach((button) => {
+            button.remove();
+        });
+
+        buttonGroup.resetFactory();
+        buttonGroup.generateMultipleButtons(
+            gameObject.numberOfButtons,
+            buttonSoundList
+        );
+    }
 
     buttonGroup.buttons.forEach((button) => {
         const gameButton = document.createElement("button");
@@ -226,21 +234,13 @@ const createNumberOfButtonsSelect = (gameObject) => {
 
 generateGameButtonClickHandler = (gameObject) => {
     return () => {
-        const numberOfButtonsSelected = document.getElementById(
-            "button-number-select"
-        ).value;
+        const numberOfButtonsSelected = parseInt(
+            document.getElementById("button-number-select").value
+        );
 
         if (numberOfButtonsSelected) {
             gameObject.numberOfButtons = numberOfButtonsSelected;
-            gameObject.gameButtonGroup.resetFactory();
-
-            const allGameButtons = document.querySelectorAll(".game-button");
-            allGameButtons.forEach((button) => {
-                button.remove();
-            });
-
             generateGameButtons(gameObject);
-
             gameObject.dataStorage.setGameObject(gameObject);
         }
     };
