@@ -12,7 +12,7 @@ class WebAudioApi {
             739.99, 783.99, 830.61, 880.0, 932.33, 987.77, 1046.5, 1108.73,
             1174.66, 1244.51, 1318.51, 1396.91, 1479.98, 1567.98, 1661.22,
             1760.0,
-        ]; //55.00-1760.00Hz range
+        ];
     }
 
     getRandomNoteFrequencyHz = () => {
@@ -20,21 +20,26 @@ class WebAudioApi {
         return this.notesHz[randomIndex];
     };
 
-    generateRandomNoteArray = (arrayLength, containsDuplicates) => {
+    generateRandomNoteArray = (arrayLength) => {
         let arrayLengthLimit = arrayLength;
-        if (!containsDuplicates) {
+        let remainingNotes = 0;
+        if (arrayLength > this.notesHz.length) {
             arrayLengthLimit = this.notesHz.length;
+            remainingNotes = arrayLength - this.notesHz.length;
         }
+
         const randomNoteArray = [];
         while (randomNoteArray.length < arrayLengthLimit) {
             const randomFrequency = this.getRandomNoteFrequencyHz();
-            if (
-                containsDuplicates ||
-                !randomNoteArray.includes(randomFrequency)
-            ) {
+            if (!randomNoteArray.includes(randomFrequency)) {
                 randomNoteArray.push(randomFrequency);
             }
         }
+
+        for (let i = 0; i < remainingNotes; i++) {
+            randomNoteArray.push(randomNoteArray[i]);
+        }
+
         return randomNoteArray;
     };
 
@@ -47,9 +52,9 @@ class WebAudioApi {
         oscillator.frequency.value = noteToPlayHz;
 
         let amplifier = audioCtx.createGain();
-        if (noteToPlayHz > 1000) {
+        if (noteToPlayHz > 900) {
             amplifier.gain.value = 0.2;
-        } else if (noteToPlayHz > 500) {
+        } else if (noteToPlayHz > 300) {
             amplifier.gain.value = 0.4;
         } else if (noteToPlayHz < 100) {
             amplifier.gain.value = 6;
