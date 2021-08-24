@@ -4,6 +4,7 @@ class Game {
         this.maxLevelCompleted = 1;
         this.currentButtonSequence = [];
         this.numberOfButtons = 4;
+        this.userCanClickGameButtons = true;
         this.gameButtonGroup = new GameButtonFactory();
         this.webAudioApi = new WebAudioApi();
         this.dataStorage;

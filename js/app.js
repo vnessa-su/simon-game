@@ -45,6 +45,8 @@ const highlightButtonsInSequence = (gameObject) => {
     const buttonGroup = gameObject.gameButtonGroup;
     const audio = gameObject.webAudioApi;
 
+    gameObject.userCanClickGameButtons = false;
+
     gameObject.generateRandomSequence();
     const sequenceOfButtons = gameObject.currentButtonSequence;
     sequenceOfButtons.forEach((buttonId, sequenceIndex) => {
@@ -55,6 +57,9 @@ const highlightButtonsInSequence = (gameObject) => {
 
             const button = buttonGroup.getButtonById(buttonId);
             audio.playNote(button.soundHz, 0.2, 0);
+            if (sequenceIndex === sequenceOfButtons.length - 1) {
+                gameObject.userCanClickGameButtons = true;
+            }
         }, 550 * sequenceIndex);
     });
 
@@ -71,29 +76,31 @@ const gameStartButtonClickHandler = (gameObject) => {
 
 const gameButtonClickHandler = (gameObject) => {
     return (e) => {
-        const buttonSequence = gameObject.currentButtonSequence;
-        const buttonId = parseInt(e.currentTarget.id);
+        if (gameObject.userCanClickGameButtons) {
+            const buttonSequence = gameObject.currentButtonSequence;
+            const buttonId = parseInt(e.currentTarget.id);
 
-        const button = gameObject.gameButtonGroup.getButtonById(buttonId);
-        gameObject.webAudioApi.playNote(button.soundHz, 0.2, 0);
+            const button = gameObject.gameButtonGroup.getButtonById(buttonId);
+            gameObject.webAudioApi.playNote(button.soundHz, 0.2, 0);
 
-        if (buttonId === buttonSequence[0]) {
-            buttonSequence.shift();
-        } else {
-            displayResultMessage("Wrong button!");
-            gameButtonsAreDisabled(true);
+            if (buttonId === buttonSequence[0]) {
+                buttonSequence.shift();
+            } else {
+                displayResultMessage("Wrong button!");
+                gameButtonsAreDisabled(true);
+            }
+
+            if (buttonSequence.length === 0) {
+                displayResultMessage("You did it!");
+                gameButtonsAreDisabled(true);
+                gameObject.incrementLevel();
+                displayCurrentLevel(gameObject.currentLevel);
+                updateLevelSelect(gameObject.maxLevelCompleted);
+            }
+
+            gameObject.dataStorage.setGameObject(gameObject);
         }
-
-        if (buttonSequence.length === 0) {
-            displayResultMessage("You did it!");
-            gameButtonsAreDisabled(true);
-            gameObject.incrementLevel();
-            displayCurrentLevel(gameObject.currentLevel);
-            updateLevelSelect(gameObject.maxLevelCompleted);
-        }
-
         e.currentTarget.blur();
-        gameObject.dataStorage.setGameObject(gameObject);
     };
 };
 
