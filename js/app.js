@@ -20,6 +20,11 @@ const generateGameButtons = (gameObject) => {
             gameObject.numberOfButtons
         );
 
+        const color = gameObject.colorPalette;
+        const buttonColorList = color.generateSquareGridColors(
+            gameObject.numberOfButtons
+        );
+
         const allGameButtons = document.querySelectorAll(".game-button");
         allGameButtons.forEach((button) => {
             button.remove();
@@ -28,25 +33,27 @@ const generateGameButtons = (gameObject) => {
         buttonGroup.resetFactory();
         buttonGroup.generateMultipleButtons(
             gameObject.numberOfButtons,
-            buttonSoundList
+            buttonSoundList,
+            buttonColorList
         );
+
+        buttonGroup.buttons.forEach((button) => {
+            const gameButton = document.createElement("button");
+            gameButton.setAttribute("class", "game-button");
+            gameButton.innerText = `Button ${button.id}`;
+            gameButton.id = button.id;
+            gameButton.style.backgroundColor = button.colorHex;
+            gameButton.addEventListener(
+                "click",
+                gameButtonClickHandler(gameObject)
+            );
+            gameContainer.appendChild(gameButton);
+        });
+
+        gameButtonsAreDisabled(true);
+
+        gameObject.dataStorage.setGameObject(gameObject);
     }
-
-    buttonGroup.buttons.forEach((button) => {
-        const gameButton = document.createElement("button");
-        gameButton.setAttribute("class", "game-button");
-        gameButton.innerText = `Button ${button.id}`;
-        gameButton.id = button.id;
-        gameButton.addEventListener(
-            "click",
-            gameButtonClickHandler(gameObject)
-        );
-        gameContainer.appendChild(gameButton);
-    });
-
-    gameButtonsAreDisabled(true);
-
-    gameObject.dataStorage.setGameObject(gameObject);
 };
 
 const highlightButtonsInSequence = (gameObject) => {

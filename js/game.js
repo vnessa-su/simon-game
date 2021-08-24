@@ -8,6 +8,7 @@ class Game {
         this.gameButtonGroup = new GameButtonFactory();
         this.webAudioApi = new WebAudioApi();
         this.dataStorage;
+        this.colorPalette = new ColorPalette();
     }
 
     generateRandomSequence = () => {
