@@ -6,6 +6,7 @@ class Game {
         this.numberOfButtons = 4;
         this.gameButtonGroup = new GameButtonFactory();
         this.webAudioApi = new WebAudioApi();
+        this.dataStorage;
     }
 
     generateRandomSequence = () => {

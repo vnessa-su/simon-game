@@ -37,6 +37,8 @@ const generateGameButtons = (gameObject) => {
     });
 
     gameButtonsAreDisabled(true);
+
+    gameObject.dataStorage.setGameObject(gameObject);
 };
 
 const highlightButtonsInSequence = (gameObject) => {
@@ -55,6 +57,8 @@ const highlightButtonsInSequence = (gameObject) => {
             audio.playNote(button.soundHz, 0.2, 0);
         }, 550 * sequenceIndex);
     });
+
+    gameObject.dataStorage.setGameObject(gameObject);
 };
 
 const gameStartButtonClickHandler = (gameObject) => {
@@ -67,8 +71,8 @@ const gameStartButtonClickHandler = (gameObject) => {
 
 const gameButtonClickHandler = (gameObject) => {
     return (e) => {
-        const buttonId = parseInt(e.currentTarget.id);
         const buttonSequence = gameObject.currentButtonSequence;
+        const buttonId = parseInt(e.currentTarget.id);
 
         const button = gameObject.gameButtonGroup.getButtonById(buttonId);
         gameObject.webAudioApi.playNote(button.soundHz, 0.2, 0);
@@ -87,7 +91,9 @@ const gameButtonClickHandler = (gameObject) => {
             displayCurrentLevel(gameObject.currentLevel);
             updateLevelSelect(gameObject.maxLevelCompleted);
         }
+
         e.currentTarget.blur();
+        gameObject.dataStorage.setGameObject(gameObject);
     };
 };
 
@@ -126,6 +132,8 @@ const resetButtonClickHandler = (gameObject) => {
         gameObject.resetLevels();
         displayCurrentLevel(gameObject.currentLevel);
         updateLevelSelect(gameObject.maxLevelCompleted);
+
+        gameObject.dataStorage.setGameObject(gameObject);
     };
 };
 
@@ -152,6 +160,8 @@ const goToLevelButtonClickHandler = (gameObject) => {
         if (selectedLevel) {
             gameObject.currentLevel = selectedLevel;
             displayCurrentLevel(gameObject.currentLevel);
+
+            gameObject.dataStorage.setGameObject(gameObject);
         }
     };
 };
@@ -223,11 +233,15 @@ generateGameButtonClickHandler = (gameObject) => {
             });
 
             generateGameButtons(gameObject);
+
+            gameObject.dataStorage.setGameObject(gameObject);
         }
     };
 };
 
-const game = new Game();
+const gameStorage = new DataStorage();
+const game = gameStorage.getGameObject();
+game.dataStorage = gameStorage;
 
 createNumberOfButtonsSelect(game);
 createGameStartButton(game);
