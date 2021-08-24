@@ -10,13 +10,12 @@ const createGameStartButton = (gameObject) => {
     gameContainer.appendChild(startButton);
 };
 
-const generateGameButtons = (gameObject, buttonSoundsHaveDuplicates) => {
+const generateGameButtons = (gameObject) => {
     const gameContainer = document.getElementById("game-container");
 
     const audio = gameObject.webAudioApi;
     const buttonSoundList = audio.generateRandomNoteArray(
-        gameObject.numberOfButtons,
-        buttonSoundsHaveDuplicates
+        gameObject.numberOfButtons
     );
 
     const buttonGroup = gameObject.gameButtonGroup;
@@ -223,7 +222,7 @@ generateGameButtonClickHandler = (gameObject) => {
                 button.remove();
             });
 
-            generateGameButtons(gameObject, true);
+            generateGameButtons(gameObject);
         }
     };
 };
@@ -232,7 +231,7 @@ const game = new Game();
 
 createNumberOfButtonsSelect(game);
 createGameStartButton(game);
-generateGameButtons(game, false);
+generateGameButtons(game);
 
 displayCurrentLevel(game.currentLevel);
 createResetButton(game);
