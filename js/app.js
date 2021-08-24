@@ -213,15 +213,18 @@ generateGameButtonClickHandler = (gameObject) => {
         const numberOfButtonsSelected = document.getElementById(
             "button-number-select"
         ).value;
-        gameObject.numberOfButtons = numberOfButtonsSelected;
-        gameObject.gameButtonGroup.resetFactory();
 
-        const allGameButtons = document.querySelectorAll(".game-button");
-        allGameButtons.forEach((button) => {
-            button.remove();
-        });
+        if (numberOfButtonsSelected) {
+            gameObject.numberOfButtons = numberOfButtonsSelected;
+            gameObject.gameButtonGroup.resetFactory();
 
-        generateGameButtons(gameObject, true);
+            const allGameButtons = document.querySelectorAll(".game-button");
+            allGameButtons.forEach((button) => {
+                button.remove();
+            });
+
+            generateGameButtons(gameObject, true);
+        }
     };
 };
 
