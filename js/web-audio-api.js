@@ -44,7 +44,6 @@ class WebAudioApi {
     };
 
     playNote = (noteToPlayHz, durationSeconds, delaySeconds) => {
-        console.log(noteToPlayHz);
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         const audioCtx = new AudioContext();
         let oscillator = audioCtx.createOscillator();
