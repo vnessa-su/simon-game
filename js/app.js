@@ -10,12 +10,22 @@ const createGameStartButton = (gameObject) => {
     gameContainer.appendChild(startButton);
 };
 
-const generateGameButtons = (gameObject) => {
+const generateGameButtons = (gameObject, buttonSoundsHaveDuplicates) => {
     const gameContainer = document.getElementById("game-container");
 
-    const butonGroup = game.gameButtonGroup;
+    const audio = gameObject.webAudioApi;
+    const buttonSoundList = audio.generateRandomNoteArray(
+        gameObject.numberOfButtons,
+        buttonSoundsHaveDuplicates
+    );
 
-    butonGroup.buttons.forEach((button) => {
+    const buttonGroup = gameObject.gameButtonGroup;
+    buttonGroup.generateMultipleButtons(
+        gameObject.numberOfButtons,
+        buttonSoundList
+    );
+
+    buttonGroup.buttons.forEach((button) => {
         const gameButton = document.createElement("button");
         gameButton.setAttribute("class", "game-button");
         gameButton.innerText = `Button ${button.id}`;
@@ -32,6 +42,7 @@ const generateGameButtons = (gameObject) => {
 
 const highlightButtonsInSequence = (gameObject) => {
     const buttonGroup = gameObject.gameButtonGroup;
+    const audio = gameObject.webAudioApi;
 
     gameObject.generateRandomSequence();
     const sequenceOfButtons = gameObject.currentButtonSequence;
@@ -136,11 +147,13 @@ const createLevelSelect = (gameObject) => {
     levelDisplay.appendChild(goToLevelButton);
 };
 
-const goToLevelButtonClickHandler = (currentLevel) => {
+const goToLevelButtonClickHandler = (gameObject) => {
     return () => {
         const selectedLevel = document.getElementById("level-select").value;
-        gameObject.currentLevel = selectedLevel;
-        displayCurrentLevel(gameObject.currentLevel);
+        if (selectedLevel) {
+            gameObject.currentLevel = selectedLevel;
+            displayCurrentLevel(gameObject.currentLevel);
+        }
     };
 };
 
@@ -163,16 +176,61 @@ const updateLevelSelect = (maxLevelCompleted) => {
     }
 };
 
+const createNumberOfButtonsSelect = (gameObject) => {
+    const buttonNumberOptions = [4, 9, 16, 25, 36, 49, 64, 81, 100];
+    const gameContainer = document.getElementById("game-container");
+
+    const buttonNumberSelect = document.createElement("select");
+    buttonNumberSelect.id = "button-number-select";
+    gameContainer.appendChild(buttonNumberSelect);
+
+    const defaultOption = document.createElement("option");
+    defaultOption.innerText = "Number of Game Buttons:";
+    defaultOption.value = "";
+    defaultOption.selected = true;
+    defaultOption.disabled = true;
+    buttonNumberSelect.appendChild(defaultOption);
+
+    for (let i = 0; i < buttonNumberOptions.length; i++) {
+        const newOption = document.createElement("option");
+        const numberOption = buttonNumberOptions[i];
+        newOption.innerText = numberOption;
+        newOption.value = numberOption;
+        buttonNumberSelect.appendChild(newOption);
+    }
+
+    const generateGameButton = document.createElement("button");
+    generateGameButton.innerText = "Generate";
+    generateGameButton.addEventListener(
+        "click",
+        generateGameButtonClickHandler(gameObject)
+    );
+    gameContainer.appendChild(generateGameButton);
+};
+
+generateGameButtonClickHandler = (gameObject) => {
+    return () => {
+        const numberOfButtonsSelected = document.getElementById(
+            "button-number-select"
+        ).value;
+        gameObject.numberOfButtons = numberOfButtonsSelected;
+        gameObject.gameButtonGroup.resetFactory();
+
+        const allGameButtons = document.querySelectorAll(".game-button");
+        allGameButtons.forEach((button) => {
+            button.remove();
+        });
+
+        generateGameButtons(gameObject, true);
+    };
+};
+
 const game = new Game();
+
+createNumberOfButtonsSelect(game);
+createGameStartButton(game);
+generateGameButtons(game, false);
+
 displayCurrentLevel(game.currentLevel);
 createResetButton(game);
-createGameStartButton(game);
-
-const audio = game.webAudioApi;
-const buttonSoundList = audio.generateRandomNoteArray(4, false);
-
-const buttonGroup = game.gameButtonGroup;
-buttonGroup.generateMultipleButtons(game.numberOfButtons, buttonSoundList);
-generateGameButtons(game);
-
 createLevelSelect(game);
