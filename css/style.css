@@ -1,3 +1,14 @@
+#content-container {
+    width: 100%;
+    display: grid;
+    grid-template-rows: 3fr 1fr;
+    grid-template-areas:
+        "game-container level-display-container"
+        "game-container level-display-container"
+        "game-container level-display-container"
+        "results-container results-container";
+}
+
 .game-button {
     background-color: -internal-light-dark(rgb(239, 239, 239), rgb(59, 59, 59));
     border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
