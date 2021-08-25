@@ -1,7 +1,7 @@
 #content-container {
-    width: 100%;
     display: grid;
     grid-template-rows: 3fr 1fr;
+    grid-template-columns: 2fr 1fr;
     grid-template-areas:
         "game-container level-display-container"
         "game-container level-display-container"
