@@ -2,6 +2,16 @@
 // Event Handlers
 ///////////////////////
 
+const windowResizeHandler = (gameObject) => {
+    return () => {
+        createNumberOfButtonsSelect(gameObject);
+        if (window.innerWidth < 630 && gameObject.numberOfButtons > 49) {
+            gameObject.numberOfButtons = 49;
+            generateGameButtons(gameObject);
+        }
+    };
+};
+
 const gameStartButtonClickHandler = (gameObject) => {
     return () => {
         highlightButtonsInSequence(gameObject);
@@ -100,12 +110,23 @@ const createGameStartButton = (gameObject) => {
 };
 
 const createNumberOfButtonsSelect = (gameObject) => {
-    const buttonNumberOptions = [4, 9, 16, 25, 36, 49, 64, 81, 100];
     const gameContainer = document.getElementById("game-container");
 
-    const buttonNumberSelectContainer = document.createElement("div");
-    buttonNumberSelectContainer.id = "button-number-select-container";
-    gameContainer.appendChild(buttonNumberSelectContainer);
+    let buttonNumberOptions = [4, 9, 16, 25, 36, 49, 64, 81, 100];
+    if (window.innerWidth < 630) {
+        buttonNumberOptions = [4, 9, 16, 25, 36, 49];
+    }
+
+    let buttonNumberSelectContainer = document.getElementById(
+        "button-number-select-container"
+    );
+    if (buttonNumberSelectContainer) {
+        buttonNumberSelectContainer.innerHTML = "";
+    } else {
+        buttonNumberSelectContainer = document.createElement("div");
+        buttonNumberSelectContainer.id = "button-number-select-container";
+        gameContainer.appendChild(buttonNumberSelectContainer);
+    }
 
     const buttonNumberSelect = document.createElement("select");
     buttonNumberSelect.id = "button-number-select";
@@ -126,37 +147,56 @@ const createNumberOfButtonsSelect = (gameObject) => {
         buttonNumberSelect.appendChild(newOption);
     }
 
-    const generateGameButton = document.createElement("button");
-    generateGameButton.innerText = "Generate";
-    generateGameButton.addEventListener(
-        "click",
-        generateGameButtonClickHandler(gameObject)
+    let generateGameButton = document.querySelector(
+        "#button-number-select-container button"
     );
-    buttonNumberSelectContainer.appendChild(generateGameButton);
+    if (!generateGameButton) {
+        generateGameButton = document.createElement("button");
+        generateGameButton.innerText = "Generate";
+        generateGameButton.addEventListener(
+            "click",
+            generateGameButtonClickHandler(gameObject)
+        );
+        buttonNumberSelectContainer.appendChild(generateGameButton);
+    }
 };
 
 const generateGameButtons = (gameObject) => {
     const gameContainer = document.getElementById("game-container");
 
-    const gameButtonContainer = document.createElement("div");
-    gameButtonContainer.id = "game-button-container";
-    gameContainer.appendChild(gameButtonContainer);
+    let gameButtonContainer = document.getElementById("game-button-container");
+    if (!gameButtonContainer) {
+        gameButtonContainer = document.createElement("div");
+        gameButtonContainer.id = "game-button-container";
+        gameContainer.appendChild(gameButtonContainer);
+    }
+
+    const numberOfButtons = gameObject.numberOfButtons;
+    let buttonSize =
+        Math.floor(
+            gameButtonContainer.clientWidth /
+                Math.floor(Math.sqrt(numberOfButtons))
+        ) - 5;
+    if (numberOfButtons < 9) {
+        buttonSize = Math.floor(
+            gameButtonContainer.clientWidth / numberOfButtons
+        );
+    }
+    console.log(window.innerWidth);
+    console.log(Math.sqrt(numberOfButtons));
+    console.log(buttonSize);
 
     const buttonGroup = gameObject.gameButtonGroup;
-    if (buttonGroup.buttons.length !== gameObject.numberOfButtons) {
+    if (buttonGroup.buttons.length !== numberOfButtons) {
         const audio = gameObject.webAudioApi;
-        const buttonSoundList = audio.generateRandomNoteArray(
-            gameObject.numberOfButtons
-        );
+        const buttonSoundList = audio.generateRandomNoteArray(numberOfButtons);
 
         const color = gameObject.colorPalette;
-        const buttonColorList = color.generateSquareGridColors(
-            gameObject.numberOfButtons
-        );
+        const buttonColorList = color.generateSquareGridColors(numberOfButtons);
 
         buttonGroup.resetFactory();
         buttonGroup.generateMultipleButtons(
-            gameObject.numberOfButtons,
+            numberOfButtons,
             buttonSoundList,
             buttonColorList
         );
@@ -172,9 +212,11 @@ const generateGameButtons = (gameObject) => {
     buttonGroup.buttons.forEach((button) => {
         const gameButton = document.createElement("button");
         gameButton.setAttribute("class", "game-button");
-        gameButton.innerText = `Button ${button.id}`;
+        gameButton.innerText = `${button.id + 1}`;
         gameButton.id = button.id;
         gameButton.style.backgroundColor = button.colorHex;
+        gameButton.style.width = `${buttonSize}px`;
+        gameButton.style.height = `${buttonSize}px`;
         gameButton.addEventListener(
             "click",
             gameButtonClickHandler(gameObject)
