@@ -1,19 +1,47 @@
+body {
+    height: 100vh;
+}
 #content-container {
     display: grid;
-    grid-template-rows: 3fr 1fr;
-    grid-template-columns: 2fr 1fr;
-    grid-template-areas:
-        "game-container level-display-container"
-        "game-container level-display-container"
-        "game-container level-display-container"
-        "results-container results-container";
+    grid-template: "game-container right-side-container" 1fr / 2fr 1fr;
+}
+
+#game-container {
+    width: 600px;
+    min-height: 600px;
+    box-sizing: content-box;
+    text-align: center;
+}
+
+#game-button-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    margin-top: 5px;
+}
+
+#button-number-select-container,
+#level-select-container {
+    margin: 5px 0 10px 0;
+}
+
+#button-number-select,
+#level-select {
+    margin: 5px 5px 5px 0;
+}
+
+.right-side-container {
+    padding: 0 0 0 20px;
 }
 
 .game-button {
+    color: black;
     background-color: -internal-light-dark(rgb(239, 239, 239), rgb(59, 59, 59));
     border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
     border-width: 2px;
-    border-radius: 3px;
+    border-radius: 50%;
+    margin-top: 5px;
+    box-sizing: border-box;
 }
 
 .game-button:focus {
