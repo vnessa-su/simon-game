@@ -103,9 +103,13 @@ const createNumberOfButtonsSelect = (gameObject) => {
     const buttonNumberOptions = [4, 9, 16, 25, 36, 49, 64, 81, 100];
     const gameContainer = document.getElementById("game-container");
 
+    const buttonNumberSelectContainer = document.createElement("div");
+    buttonNumberSelectContainer.id = "button-number-select-container";
+    gameContainer.appendChild(buttonNumberSelectContainer);
+
     const buttonNumberSelect = document.createElement("select");
     buttonNumberSelect.id = "button-number-select";
-    gameContainer.appendChild(buttonNumberSelect);
+    buttonNumberSelectContainer.appendChild(buttonNumberSelect);
 
     const defaultOption = document.createElement("option");
     defaultOption.innerText = "Number of Game Buttons:";
@@ -128,11 +132,15 @@ const createNumberOfButtonsSelect = (gameObject) => {
         "click",
         generateGameButtonClickHandler(gameObject)
     );
-    gameContainer.appendChild(generateGameButton);
+    buttonNumberSelectContainer.appendChild(generateGameButton);
 };
 
 const generateGameButtons = (gameObject) => {
     const gameContainer = document.getElementById("game-container");
+
+    const gameButtonContainer = document.createElement("div");
+    gameButtonContainer.id = "game-button-container";
+    gameContainer.appendChild(gameButtonContainer);
 
     const buttonGroup = gameObject.gameButtonGroup;
     if (buttonGroup.buttons.length !== gameObject.numberOfButtons) {
@@ -171,7 +179,7 @@ const generateGameButtons = (gameObject) => {
             "click",
             gameButtonClickHandler(gameObject)
         );
-        gameContainer.appendChild(gameButton);
+        gameButtonContainer.appendChild(gameButton);
     });
 
     gameButtonsAreDisabled(true);
@@ -227,9 +235,14 @@ const createResetButton = (gameObject) => {
 
 const createLevelSelect = (gameObject) => {
     const levelDisplay = document.getElementById("level-display-container");
+
+    const levelSelectContainer = document.createElement("div");
+    levelSelectContainer.id = "level-select-container";
+    levelDisplay.appendChild(levelSelectContainer);
+
     const levelSelect = document.createElement("select");
     levelSelect.id = "level-select";
-    levelDisplay.appendChild(levelSelect);
+    levelSelectContainer.appendChild(levelSelect);
 
     updateLevelSelect(gameObject.maxLevelCompleted);
 
@@ -239,7 +252,7 @@ const createLevelSelect = (gameObject) => {
         "click",
         goToLevelButtonClickHandler(gameObject)
     );
-    levelDisplay.appendChild(goToLevelButton);
+    levelSelectContainer.appendChild(goToLevelButton);
 };
 
 const updateLevelSelect = (maxLevelCompleted) => {
