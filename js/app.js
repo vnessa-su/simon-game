@@ -7,7 +7,7 @@ createGameStartButton(game);
 generateGameButtons(game);
 
 displayCurrentLevel(game.currentLevel);
-createResetButton(game);
 createLevelSelect(game);
+createResetButton(game);
 
 window.addEventListener("resize", windowResizeHandler(game));
