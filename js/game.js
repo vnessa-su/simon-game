@@ -34,4 +34,27 @@ class Game {
         this.currentLevel = 1;
         this.maxLevelCompleted = 1;
     };
+
+    generateButtonGroup = () => {
+        const audio = this.webAudioApi;
+        const buttonSoundList = audio.generateRandomNoteArray(
+            this.numberOfButtons
+        );
+
+        const color = this.colorPalette;
+        const buttonColorList = color.generateSquareGridColors(
+            this.numberOfButtons
+        );
+
+        const icons = this.fontAwesomeIcons;
+        const iconNameList = icons.generateSetOfIcons(this.numberOfButtons);
+
+        this.gameButtonGroup.resetFactory();
+        this.gameButtonGroup.generateMultipleButtons(
+            this.numberOfButtons,
+            buttonSoundList,
+            buttonColorList,
+            iconNameList
+        );
+    };
 }

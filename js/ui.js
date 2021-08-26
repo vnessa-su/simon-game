@@ -188,23 +188,7 @@ const generateGameButtons = (gameObject) => {
 
     const buttonGroup = gameObject.gameButtonGroup;
     if (buttonGroup.buttons.length !== numberOfButtons) {
-        const audio = gameObject.webAudioApi;
-        const buttonSoundList = audio.generateRandomNoteArray(numberOfButtons);
-
-        const color = gameObject.colorPalette;
-        const buttonColorList = color.generateSquareGridColors(numberOfButtons);
-
-        const icons = gameObject.fontAwesomeIcons;
-        const iconNameList = icons.generateSetOfIcons(numberOfButtons);
-
-        buttonGroup.resetFactory();
-        buttonGroup.generateMultipleButtons(
-            numberOfButtons,
-            buttonSoundList,
-            buttonColorList,
-            iconNameList
-        );
-
+        gameObject.generateButtonGroup();
         gameObject.dataStorage.setGameObject(gameObject);
     }
 
