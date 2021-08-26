@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Acme&family=Montserrat:wght@700&display=swap");
+
 body {
     height: 100vh;
     text-align: center;
@@ -7,6 +9,8 @@ body {
 }
 
 body h1 {
+    font-family: "Acme", sans-serif;
+    color: white;
     margin: 5px;
 }
 
@@ -48,6 +52,8 @@ body h1 {
 }
 
 h3 {
+    font-family: "Montserrat", sans-serif;
+    color: white;
     margin: 10px 0 0 0;
 }
 
