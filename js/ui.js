@@ -270,7 +270,7 @@ const displayCurrentLevel = (level) => {
 const createResetButton = (gameObject) => {
     const levelDisplay = document.getElementById("level-display-container");
     const resetButton = document.createElement("button");
-    resetButton.innerText = "Reset to Level 1";
+    resetButton.innerText = "New Game";
     resetButton.addEventListener("click", resetButtonClickHandler(gameObject));
     levelDisplay.appendChild(resetButton);
 };
