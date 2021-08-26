@@ -1,6 +1,9 @@
 body {
     height: 100vh;
     text-align: center;
+    background-image: url("https://images.pexels.com/photos/3826435/pexels-photo-3826435.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+    background-size: cover;
+    background-attachment: fixed;
 }
 
 body h1 {
