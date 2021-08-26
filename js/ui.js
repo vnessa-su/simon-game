@@ -102,6 +102,7 @@ const createGameStartButton = (gameObject) => {
 
     const startButton = document.createElement("button");
     startButton.innerText = "Start Next";
+    startButton.setAttribute("class", "btn btn-success btn-sm");
     startButton.addEventListener(
         "click",
         gameStartButtonClickHandler(gameObject)
@@ -130,6 +131,7 @@ const createNumberOfButtonsSelect = (gameObject) => {
 
     const buttonNumberSelect = document.createElement("select");
     buttonNumberSelect.id = "button-number-select";
+    buttonNumberSelect.setAttribute("class", "form-select btn-sm");
     buttonNumberSelectContainer.appendChild(buttonNumberSelect);
 
     const defaultOption = document.createElement("option");
@@ -153,6 +155,7 @@ const createNumberOfButtonsSelect = (gameObject) => {
     if (!generateGameButton) {
         generateGameButton = document.createElement("button");
         generateGameButton.innerText = "Generate";
+        generateGameButton.setAttribute("class", "btn btn-primary btn-sm");
         generateGameButton.addEventListener(
             "click",
             generateGameButtonClickHandler(gameObject)
@@ -271,6 +274,7 @@ const createResetButton = (gameObject) => {
     const levelDisplay = document.getElementById("level-display-container");
     const resetButton = document.createElement("button");
     resetButton.innerText = "New Game";
+    resetButton.setAttribute("class", "btn btn-primary btn-sm");
     resetButton.addEventListener("click", resetButtonClickHandler(gameObject));
     levelDisplay.appendChild(resetButton);
 };
@@ -284,12 +288,14 @@ const createLevelSelect = (gameObject) => {
 
     const levelSelect = document.createElement("select");
     levelSelect.id = "level-select";
+    levelSelect.setAttribute("class", "form-select btn-sm");
     levelSelectContainer.appendChild(levelSelect);
 
     updateLevelSelect(gameObject.maxLevelCompleted);
 
     const goToLevelButton = document.createElement("button");
     goToLevelButton.innerText = "Go To Level";
+    goToLevelButton.setAttribute("class", "btn btn-primary btn-sm");
     goToLevelButton.addEventListener(
         "click",
         goToLevelButtonClickHandler(gameObject)
