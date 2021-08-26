@@ -4,21 +4,28 @@ class GameButtonFactory {
         this.currentId = 0;
     }
 
-    generateButton = (buttonSoundHz, buttonColorHex) => {
+    generateButton = (buttonSoundHz, buttonColorHex, buttonIconName) => {
         const newButton = new GameButton(
             this.currentId,
             buttonSoundHz,
-            buttonColorHex
+            buttonColorHex,
+            buttonIconName
         );
         this.buttons.push(newButton);
         this.currentId++;
     };
 
-    generateMultipleButtons = (numberOfButtons, soundListHz, colorListHex) => {
+    generateMultipleButtons = (
+        numberOfButtons,
+        soundListHz,
+        colorListHex,
+        iconNameList
+    ) => {
         for (let i = 0; i < numberOfButtons; i++) {
             const buttonSound = soundListHz[i];
             const buttonColor = colorListHex[i];
-            this.generateButton(buttonSound, buttonColor);
+            const buttonIcon = iconNameList[i];
+            this.generateButton(buttonSound, buttonColor, buttonIcon);
         }
     };
 

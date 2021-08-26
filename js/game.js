@@ -9,6 +9,7 @@ class Game {
         this.webAudioApi = new WebAudioApi();
         this.dataStorage;
         this.colorPalette = new ColorPalette();
+        this.fontAwesomeIcons = new FontAwesomeIcons();
     }
 
     generateRandomSequence = () => {

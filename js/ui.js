@@ -185,9 +185,6 @@ const generateGameButtons = (gameObject) => {
             gameButtonContainer.clientWidth / numberOfButtons
         );
     }
-    console.log(window.innerWidth);
-    console.log(Math.sqrt(numberOfButtons));
-    console.log(buttonSize);
 
     const buttonGroup = gameObject.gameButtonGroup;
     if (buttonGroup.buttons.length !== numberOfButtons) {
@@ -197,11 +194,15 @@ const generateGameButtons = (gameObject) => {
         const color = gameObject.colorPalette;
         const buttonColorList = color.generateSquareGridColors(numberOfButtons);
 
+        const icons = gameObject.fontAwesomeIcons;
+        const iconNameList = icons.generateSetOfIcons(numberOfButtons);
+
         buttonGroup.resetFactory();
         buttonGroup.generateMultipleButtons(
             numberOfButtons,
             buttonSoundList,
-            buttonColorList
+            buttonColorList,
+            iconNameList
         );
 
         gameObject.dataStorage.setGameObject(gameObject);
@@ -215,7 +216,7 @@ const generateGameButtons = (gameObject) => {
     buttonGroup.buttons.forEach((button) => {
         const gameButton = document.createElement("button");
         gameButton.setAttribute("class", "game-button");
-        gameButton.innerText = `${button.id + 1}`;
+        gameButton.innerHTML = `<i class="fa ${button.iconName}">`;
         gameButton.id = button.id;
         gameButton.style.backgroundColor = button.colorHex;
         gameButton.style.width = `${buttonSize}px`;
