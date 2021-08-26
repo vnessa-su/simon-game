@@ -7,8 +7,8 @@ const windowResizeHandler = (gameObject) => {
         createNumberOfButtonsSelect(gameObject);
         if (window.innerWidth < 630 && gameObject.numberOfButtons > 49) {
             gameObject.numberOfButtons = 49;
-            generateGameButtons(gameObject);
         }
+        generateGameButtons(gameObject);
     };
 };
 
