@@ -1,16 +1,25 @@
 body {
     height: 100vh;
+    text-align: center;
 }
+
+body h1 {
+    margin: 5px;
+}
+
 #content-container {
     display: grid;
-    grid-template: "game-container right-side-container" 1fr / 2fr 1fr;
+    grid-template:
+        "game-container" 1fr
+        "right-side-container" 1fr;
 }
 
 #game-container {
-    width: 600px;
-    min-height: 600px;
+    width: 400px;
+    min-height: 400px;
     box-sizing: content-box;
     text-align: center;
+    margin: 0 auto;
 }
 
 #game-button-container {
@@ -20,18 +29,23 @@ body {
     margin-top: 5px;
 }
 
-#button-number-select-container,
-#level-select-container {
-    margin: 5px 0 10px 0;
-}
-
 #button-number-select,
 #level-select {
-    margin: 5px 5px 5px 0;
+    margin: 5px;
+}
+
+h3 {
+    margin: 10px;
 }
 
 .right-side-container {
-    padding: 0 0 0 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+#results-container {
+    min-width: 180px;
+    padding-top: 20px;
 }
 
 .game-button {
@@ -48,6 +62,9 @@ body {
     animation-name: flash-button;
     animation-duration: 500ms;
 }
+.game-button:disabled {
+    color: grey;
+}
 
 @keyframes flash-button {
     0% {
@@ -57,5 +74,30 @@ body {
     100% {
         background-color: lightpink;
         border-color: palevioletred;
+    }
+}
+
+@media only screen and (orientation: landscape) and (max-device-width: 630px) {
+    body {
+        transform: rotate(90deg);
+    }
+}
+
+@media only screen and (min-width: 1000px) {
+    #content-container {
+        display: grid;
+        grid-template: "game-container right-side-container" 1fr / 2fr 1fr;
+    }
+
+    .right-side-container {
+        padding: 0 0 0 20px;
+        flex-direction: column;
+    }
+}
+
+@media only screen and (min-width: 630px) {
+    #game-container {
+        width: 600px;
+        min-height: 600px;
     }
 }
