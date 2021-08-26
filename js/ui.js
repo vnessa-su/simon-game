@@ -104,6 +104,20 @@ const createClickButton = (buttonText, clickHandler) => {
     return newButton;
 };
 
+const createSelectWithDefault = (selectId, defaultText) => {
+    const newSelect = document.createElement("select");
+    newSelect.id = selectId;
+
+    const defaultOption = document.createElement("option");
+    defaultOption.innerText = defaultText;
+    defaultOption.value = "";
+    defaultOption.selected = true;
+    defaultOption.disabled = true;
+    newSelect.appendChild(defaultOption);
+
+    return newSelect;
+};
+
 const createGameStartButton = (gameObject) => {
     const gameContainer = document.getElementById("game-container");
 
@@ -134,17 +148,12 @@ const createNumberOfButtonsSelect = (gameObject) => {
         gameContainer.appendChild(buttonNumberSelectContainer);
     }
 
-    const buttonNumberSelect = document.createElement("select");
-    buttonNumberSelect.id = "button-number-select";
+    const buttonNumberSelect = createSelectWithDefault(
+        "button-number-select",
+        "Number of Game Buttons:"
+    );
     buttonNumberSelect.setAttribute("class", "form-select btn-sm");
     buttonNumberSelectContainer.appendChild(buttonNumberSelect);
-
-    const defaultOption = document.createElement("option");
-    defaultOption.innerText = "Number of Game Buttons:";
-    defaultOption.value = "";
-    defaultOption.selected = true;
-    defaultOption.disabled = true;
-    buttonNumberSelect.appendChild(defaultOption);
 
     for (let i = 0; i < buttonNumberOptions.length; i++) {
         const newOption = document.createElement("option");
@@ -275,11 +284,6 @@ const createLevelSelect = (gameObject) => {
     levelSelectContainer.id = "level-select-container";
     levelDisplay.appendChild(levelSelectContainer);
 
-    const levelSelect = document.createElement("select");
-    levelSelect.id = "level-select";
-    levelSelect.setAttribute("class", "form-select btn-sm");
-    levelSelectContainer.appendChild(levelSelect);
-
     updateLevelSelect(gameObject.maxLevelCompleted);
 
     const goToLevelButton = createClickButton(
@@ -291,15 +295,20 @@ const createLevelSelect = (gameObject) => {
 };
 
 const updateLevelSelect = (maxLevelCompleted) => {
-    const levelSelect = document.getElementById("level-select");
-    levelSelect.innerHTML = "";
+    const levelSelectContainer = document.getElementById(
+        "level-select-container"
+    );
+    let levelSelect = document.getElementById("level-select");
+    if (levelSelect) {
+        levelSelect.remove();
+    }
 
-    const defaultOption = document.createElement("option");
-    defaultOption.innerText = "Select a Level:";
-    defaultOption.value = "";
-    defaultOption.selected = true;
-    defaultOption.disabled = true;
-    levelSelect.appendChild(defaultOption);
+    levelSelect = createSelectWithDefault("level-select", "Select a Level:");
+    levelSelect.setAttribute("class", "form-select btn-sm");
+    levelSelectContainer.insertBefore(
+        levelSelect,
+        levelSelectContainer.firstChild
+    );
 
     for (let i = 1; i <= maxLevelCompleted; i++) {
         const newOption = document.createElement("option");
