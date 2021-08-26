@@ -97,16 +97,21 @@ const gameButtonsAreDisabled = (buttonState) => {
     });
 };
 
+const createClickButton = (buttonText, clickHandler) => {
+    const newButton = document.createElement("button");
+    newButton.innerText = buttonText;
+    newButton.addEventListener("click", clickHandler);
+    return newButton;
+};
+
 const createGameStartButton = (gameObject) => {
     const gameContainer = document.getElementById("game-container");
 
-    const startButton = document.createElement("button");
-    startButton.innerText = "Start Next";
-    startButton.setAttribute("class", "btn btn-success btn-sm");
-    startButton.addEventListener(
-        "click",
+    const startButton = createClickButton(
+        "Start Next Sequence",
         gameStartButtonClickHandler(gameObject)
     );
+    startButton.setAttribute("class", "btn btn-success btn-sm");
     gameContainer.appendChild(startButton);
 };
 
@@ -153,13 +158,11 @@ const createNumberOfButtonsSelect = (gameObject) => {
         "#button-number-select-container button"
     );
     if (!generateGameButton) {
-        generateGameButton = document.createElement("button");
-        generateGameButton.innerText = "Generate";
-        generateGameButton.setAttribute("class", "btn btn-primary btn-sm");
-        generateGameButton.addEventListener(
-            "click",
+        generateGameButton = createClickButton(
+            "Generate",
             generateGameButtonClickHandler(gameObject)
         );
+        generateGameButton.setAttribute("class", "btn btn-primary btn-sm");
         buttonNumberSelectContainer.appendChild(generateGameButton);
     }
 };
@@ -257,10 +260,11 @@ const displayCurrentLevel = (level) => {
 
 const createResetButton = (gameObject) => {
     const levelDisplay = document.getElementById("level-display-container");
-    const resetButton = document.createElement("button");
-    resetButton.innerText = "New Game";
+    const resetButton = createClickButton(
+        "New Game",
+        resetButtonClickHandler(gameObject)
+    );
     resetButton.setAttribute("class", "btn btn-primary btn-sm");
-    resetButton.addEventListener("click", resetButtonClickHandler(gameObject));
     levelDisplay.appendChild(resetButton);
 };
 
@@ -278,13 +282,11 @@ const createLevelSelect = (gameObject) => {
 
     updateLevelSelect(gameObject.maxLevelCompleted);
 
-    const goToLevelButton = document.createElement("button");
-    goToLevelButton.innerText = "Go To Level";
-    goToLevelButton.setAttribute("class", "btn btn-primary btn-sm");
-    goToLevelButton.addEventListener(
-        "click",
+    const goToLevelButton = createClickButton(
+        "Go To Level",
         goToLevelButtonClickHandler(gameObject)
     );
+    goToLevelButton.setAttribute("class", "btn btn-primary btn-sm");
     levelSelectContainer.appendChild(goToLevelButton);
 };
 
